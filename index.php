@@ -106,7 +106,7 @@ if ($logfile != "" and $action == "delete") {
             $data = implode("\n",array_reverse($data_array));
             
         ?>
-        <textarea id="output" class="module-content"><?=$data?></textarea>
+        <textarea id="output" class="module-content"><?=htmlspecialchars($data)?></textarea>
         <input type="hidden" name="type" value="logs">
         </form>
     </div>
