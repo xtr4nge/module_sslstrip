@@ -21,21 +21,33 @@
 include "../_info_.php";
 
 $type = $_POST['type'];
+$newdata = $_POST['newdata'];
 
 if ($type == "logs") {
-
-    //$dump[0] = 1;
-    //$dump[1] = 2;
         
     $filename = $mod_logs;
 
-    $fh = fopen($filename, "r") or die("Could not open file.");
+    $fh = fopen($filename, "r"); //or die("Could not open file.");
     $data = fread($fh, filesize($filename)); //or die("Could not read file.");
     fclose($fh);
     $dump = explode("\n", $data);
     //$dump = implode("\n",array_reverse($data_array));
     
     echo json_encode(array_reverse($dump));
+
+}
+
+if ($type == "inject") {
+
+    if ($newdata != "") { $newdata = ereg_replace(13,  "", $newdata);
+        $exec = "/bin/echo '$newdata' > /FruityWifi/www/modules/sslstrip/includes/inject.txt";
+        exec("/FruityWifi/www/bin/danger \"" . $exec . "\"", $output);
+    }
+
+    $exec = "cat /FruityWifi/www/modules/sslstrip/includes/inject.txt";
+    exec("/FruityWifi/www/bin/danger \"" . $exec . "\"", $dump);
+
+    echo json_encode($dump);
 
 }
 ?>
