@@ -27,8 +27,8 @@ $new_rename_file = $_POST["new_rename_file"];
 if ($type == "inject") {
 
     if ($newdata != "") { $newdata = ereg_replace(13,  "", $newdata);
-        $exec = "/bin/echo '$newdata' | base64 --decode > /FruityWifi/www/modules/sslstrip/includes/inject.txt";
-        exec("/FruityWifi/www/bin/danger \"" . $exec . "\"", $output);
+        $exec = "/bin/echo '$newdata' | base64 --decode > /usr/share/FruityWifi/www/modules/sslstrip/includes/inject.txt";
+        exec("/usr/share/FruityWifi/bin/danger \"" . $exec . "\"", $output);
     }
 
     header('Location: ../index.php?tab=2');
@@ -39,8 +39,8 @@ if ($type == "inject") {
 if ($type == "tamperer") {
 
     if ($newdata != "") { $newdata = ereg_replace(13,  "", $newdata);
-        $exec = "/bin/echo '$newdata' | base64 --decode > /FruityWifi/www/modules/sslstrip/includes/app_cache_poison/config.ini";
-        exec("/FruityWifi/www/bin/danger \"" . $exec . "\"", $output);
+        $exec = "/bin/echo '$newdata' | base64 --decode > /usr/share/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/config.ini";
+        exec("/usr/share/FruityWifi/bin/danger \"" . $exec . "\"", $output);
     }
 
     header('Location: ../index.php?tab=3');
@@ -54,9 +54,9 @@ if ($type == "templates") {
 		if ($tempname != "0") {
 			// SAVE TAMPLATE
 			if ($newdata != "") { $newdata = ereg_replace(13,  "", $newdata);
-				$template_path = "/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/templates";
+				$template_path = "/usr/share/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/templates";
         		$exec = "/bin/echo '$newdata' | base64 --decode > $template_path/$tempname";
-        		exec("/FruityWifi/www/bin/danger \"" . $exec . "\"", $output);
+        		exec("/usr/share/FruityWifi/bin/danger \"" . $exec . "\"", $output);
     		}
     	}
     	
@@ -65,17 +65,17 @@ if ($type == "templates") {
 		if ($new_rename == "0") {
 			//CREATE NEW TEMPLATE
 			if ($new_rename_file != "") {
-				$template_path = "/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/templates";
+				$template_path = "/usr/share/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/templates";
 				$exec = "/bin/touch $template_path/$new_rename_file";
-				exec("/FruityWifi/www/bin/danger \"" . $exec . "\"", $output);
+				exec("/usr/share/FruityWifi/bin/danger \"" . $exec . "\"", $output);
 
 				$tempname=$new_rename_file;
 			}
 		} else {
 			//RENAME TEMPLATE
-			$template_path = "/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/templates";
+			$template_path = "/usr/share/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/templates";
 			$exec = "/bin/mv $template_path/$new_rename $template_path/$new_rename_file";
-			exec("/FruityWifi/www/bin/danger \"" . $exec . "\"", $output);
+			exec("/usr/share/FruityWifi/bin/danger \"" . $exec . "\"", $output);
 
 			$tempname=$new_rename_file;
 		}
@@ -83,9 +83,9 @@ if ($type == "templates") {
 	} else if ($action == "delete") {
 		if ($new_rename != "0") {
 			//DELETE TEMPLATE
-			$template_path = "/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/templates";
+			$template_path = "/usr/share/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/templates";
 			$exec = "/bin/rm $template_path/$new_rename";
-			exec("/FruityWifi/www/bin/danger \"" . $exec . "\"", $output);	
+			exec("/usr/share/FruityWifi/bin/danger \"" . $exec . "\"", $output);	
 		}
 	}
 	header("Location: ../index.php?tab=4&tempname=$tempname");
@@ -94,12 +94,12 @@ if ($type == "templates") {
 
 if($mod_service == "mod_sslstrip_inject") {
     $exec = "/bin/sed -i 's/mod_sslstrip_inject=.*/mod_sslstrip_inject=".$mod_action.";/g' ../_info_.php";
-    exec("/FruityWifi/www/bin/danger \"" . $exec . "\"" );
+    exec("/usr/share/FruityWifi/bin/danger \"" . $exec . "\"" );
 }
 
 if($mod_service == "mod_sslstrip_tamperer") {
     $exec = "/bin/sed -i 's/mod_sslstrip_tamperer=.*/mod_sslstrip_tamperer=".$mod_action.";/g' ../_info_.php";
-    exec("/FruityWifi/www/bin/danger \"" . $exec . "\"" );
+    exec("/usr/share/FruityWifi/bin/danger \"" . $exec . "\"" );
 }
 
 header('Location: ../index.php');

@@ -64,7 +64,7 @@ $tempname = $_GET["tempname"];
 // DELETE LOG
 if ($logfile != "" and $action == "delete") {
     $exec = "rm ".$mod_logs_history.$logfile.".log";
-    exec("/FruityWifi/www/bin/danger \"" . $exec . "\"", $dump);
+    exec("/usr/share/FruityWifi/bin/danger \"" . $exec . "\"", $dump);
 }
 
 ?>
@@ -156,7 +156,7 @@ if ($logfile != "" and $action == "delete") {
         <input type="submit" value="save">
         <br><br>
         <?
-            $filename = "/FruityWifi/www/modules/sslstrip/includes/inject.txt";
+            $filename = "/usr/share/FruityWifi/www/modules/sslstrip/includes/inject.txt";
 
             $fh = fopen($filename, "r"); // or die("Could not open file.");
             $data = fread($fh, filesize($filename)); // or die("Could not read file.");
@@ -172,7 +172,7 @@ if ($logfile != "" and $action == "delete") {
         <input type="submit" value="save">
         <br><br>
         <?
-            $filename = "/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/config.ini";
+            $filename = "/usr/share/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/config.ini";
 
             $fh = fopen($filename, "r"); // or die("Could not open file.");
             $data = fread($fh, filesize($filename)); // or die("Could not read file.");
@@ -190,7 +190,7 @@ if ($logfile != "" and $action == "delete") {
         <br><br>
         <?
         	if ($tempname != "") {
-            	$filename = "/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/templates/".$tempname;
+            	$filename = "/usr/share/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/templates/".$tempname;
             	$fh = fopen($filename, "r"); // or die("Could not open file.");
             	$data = fread($fh, filesize($filename)); // or die("Could not read file.");
             	fclose($fh);
@@ -219,7 +219,7 @@ if ($logfile != "" and $action == "delete") {
     		<select name="tempname" onchange='this.form.submit()'>
         	<option value="0">-</option>
         	<?
-        	$template_path = "/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/templates/";
+        	$template_path = "/usr/share/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/templates/";
         	$templates = glob($template_path.'*');
         	//print_r($templates);
 
@@ -244,7 +244,7 @@ if ($logfile != "" and $action == "delete") {
         	<select name="new_rename">
         	<option value="0">- add template -</option>
         	<?
-        	$template_path = "/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/templates/";
+        	$template_path = "/usr/share/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/templates/";
         	$templates = glob($template_path.'*');
         	//print_r($templates);
 
@@ -279,7 +279,7 @@ if ($logfile != "" and $action == "delete") {
         	<select name="new_rename">
         	<option value="0">-</option>
         	<?
-        	$template_path = "/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/templates/";
+        	$template_path = "/usr/share/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/templates/";
         	$templates = glob($template_path.'*');
         	//print_r($templates);
 
