@@ -121,10 +121,17 @@ if ($logfile != "" and $action == "delete") {
             } else {
                 $filename = $mod_logs;
             }
-
-            $fh = fopen($filename, "r"); // or die("Could not open file.");
-            $data = fread($fh, filesize($filename)); // or die("Could not read file.");
-            fclose($fh);
+            
+            /*
+            if ( 0 < filesize( $filename ) ) {
+                $fh = fopen($filename, "r"); // or die("Could not open file.");
+                $data = fread($fh, filesize($filename)); // or die("Could not read file.");
+                fclose($fh);
+            }
+            */
+            
+            $data = open_file($filename);
+            
             $data_array = explode("\n", $data);
             $data = implode("\n",array_reverse($data_array));
             
@@ -157,10 +164,16 @@ if ($logfile != "" and $action == "delete") {
         <br><br>
         <?
             $filename = "/usr/share/FruityWifi/www/modules/sslstrip/includes/inject.txt";
-
-            $fh = fopen($filename, "r"); // or die("Could not open file.");
-            $data = fread($fh, filesize($filename)); // or die("Could not read file.");
-            fclose($fh);
+            
+            /*
+            if ( 0 < filesize( $filename ) ) {
+                $fh = fopen($filename, "r"); // or die("Could not open file.");
+                $data = fread($fh, filesize($filename)); // or die("Could not read file.");
+                fclose($fh);
+            }
+            */
+            
+            $data = open_file($filename);
             
         ?>
         <textarea id="inject" name="newdata" class="module-content" style="font-family: courier;"><?=htmlspecialchars($data)?></textarea>
@@ -173,10 +186,16 @@ if ($logfile != "" and $action == "delete") {
         <br><br>
         <?
             $filename = "/usr/share/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/config.ini";
-
-            $fh = fopen($filename, "r"); // or die("Could not open file.");
-            $data = fread($fh, filesize($filename)); // or die("Could not read file.");
-            fclose($fh);
+            
+            /*
+            if ( 0 < filesize( $filename ) ) {
+                $fh = fopen($filename, "r"); // or die("Could not open file.");
+                $data = fread($fh, filesize($filename)); // or die("Could not read file.");
+                fclose($fh);
+            }
+            */
+            
+            $data = open_file($filename);
             
         ?>
         <textarea id="inject" name="newdata" class="module-content" style="font-family: courier;"><?=htmlspecialchars($data)?></textarea>
@@ -191,9 +210,17 @@ if ($logfile != "" and $action == "delete") {
         <?
         	if ($tempname != "") {
             	$filename = "/usr/share/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/templates/".$tempname;
-            	$fh = fopen($filename, "r"); // or die("Could not open file.");
-            	$data = fread($fh, filesize($filename)); // or die("Could not read file.");
-            	fclose($fh);
+            	
+                /*
+                if ( 0 < filesize( $filename ) ) {
+                    $fh = fopen($filename, "r"); // or die("Could not open file.");
+                    $data = fread($fh, filesize($filename)); // or die("Could not read file.");
+                    fclose($fh);
+                }
+            	*/
+                
+                $data = open_file($filename);
+                
 			} else {
 				$data = "";
 			}
