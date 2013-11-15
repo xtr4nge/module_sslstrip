@@ -54,6 +54,7 @@ if ($regex == 1) {
 	regex_standard($_POST["newdata"], "msg.php", $regex_extra);
     regex_standard($_GET["logfile"], "msg.php", $regex_extra);
     regex_standard($_GET["action"], "msg.php", $regex_extra);
+    regex_standard($_GET["tempname"], "msg.php", $regex_extra);
 }
 
 $newdata = $_POST['newdata'];
@@ -63,8 +64,8 @@ $tempname = $_GET["tempname"];
 
 // DELETE LOG
 if ($logfile != "" and $action == "delete") {
-    $exec = "rm ".$mod_logs_history.$logfile.".log";
-    exec("/usr/share/FruityWifi/bin/danger \"" . $exec . "\"", $dump);
+    $exec = "$bin_rm ".$mod_logs_history.$logfile.".log";
+    exec("$bin_danger \"$exec\"", $dump);
 }
 
 ?>
@@ -103,6 +104,13 @@ if ($logfile != "" and $action == "delete") {
 
 <br>
 
+
+<div id="msg" style="font-size:largest;">
+Loading, please wait...
+</div>
+
+<div id="body" style="display:none;">
+
 <div id="result" class="module">
     <ul>
         <li><a href="#result-1">Output</a></li>
@@ -110,10 +118,17 @@ if ($logfile != "" and $action == "delete") {
         <li><a href="#result-3">Inject</a></li>
         <li><a href="#result-4">Tamperer</a></li>
         <li><a href="#result-5">Templates</a></li>
+        <li><a href="#result-6">Filters</a></li>
     </ul>
     <div id="result-1">
-        <form id="formLogs-Refresh" name="formLogs-Refresh" method="POST" autocomplete="off" action="index.php">
+        <form id="formLogs-Refresh" name="formLogs-Refresh" method="GET" autocomplete="off" action="includes/save.php">
         <input type="submit" value="refresh">
+        <input type="hidden" name="mod_service" value="mod_sslstrip_filter">
+        <select style="module" name="mod_action" onchange='this.form.submit()'>
+            <option value="" <? if ($mod_sslstrip_filter == "") echo 'selected'; ?> >-</option>
+            <option value="LogEx.py" <? if ($mod_sslstrip_filter == "LogEx.py") echo 'selected'; ?>>LogEx.py</option>
+            <option value="ParseLog.py" <? if ($mod_sslstrip_filter == "ParseLog.py") echo 'selected'; ?>>ParseLog.py</option>
+        </select>
         <br><br>
         <?
             if ($logfile != "" and $action == "view") {
@@ -130,13 +145,37 @@ if ($logfile != "" and $action == "delete") {
             }
             */
             
-            $data = open_file($filename);
+            if ($mod_sslstrip_filter == "LogEx.py") {
+                $exec = "$bin_python $mod_path/includes/filters/LogEx.py $filename";
+                exec("$bin_danger \"$exec\"", $output);
+                        
+                //$data = implode("\n",$output);
+                $data = $output;
+            } else if ($mod_sslstrip_filter == "ParseLog.py") {
+                $exec = "$bin_python $mod_path/includes/filters/ParseLog.py $filename $mod_path/includes/filters";
+                exec("$bin_danger \"$exec\"", $output);
+                        
+                //$data = implode("\n",$output);
+                $data = $output;
+            } else {
             
-            $data_array = explode("\n", $data);
-            $data = implode("\n",array_reverse($data_array));
+                $data = open_file($filename);
             
+                $data_array = explode("\n", $data);
+                //$data = implode("\n",array_reverse($data_array));
+                //$data = array_reverse($data_array);
+                $data = $data_array;
+            }
+        
         ?>
-        <textarea id="output" class="module-content" style="font-family: courier;"><?=htmlspecialchars($data)?></textarea>
+        <textarea id="output" class="module-content" style="font-family: courier;"><?
+            //htmlentities($data)
+        
+            for ($i=0; $i < count($data); $i++) {
+                echo htmlentities($data[$i]) . "\n";
+            }
+        
+        ?></textarea>
         <input type="hidden" name="type" value="logs">
         </form>
     </div>
@@ -150,7 +189,7 @@ if ($logfile != "" and $action == "delete") {
 
         for ($i = 0; $i < count($logs); $i++) {
             $filename = str_replace(".log","",str_replace($mod_logs_history,"",$logs[$i]));
-            echo "<a href='?logfile=".str_replace(".log","",str_replace($mod_logs_history,"",$logs[$i]))."&action=delete'><b>x</b></a> ";
+            echo "<a href='?logfile=".str_replace(".log","",str_replace($mod_logs_history,"",$logs[$i]))."&action=delete&tab=1'><b>x</b></a> ";
             echo $filename . " | ";
             echo "<a href='?logfile=".str_replace(".log","",str_replace($mod_logs_history,"",$logs[$i]))."&action=view'><b>view</b></a>";
             echo "<br>";
@@ -185,7 +224,7 @@ if ($logfile != "" and $action == "delete") {
         <input type="submit" value="save">
         <br><br>
         <?
-            $filename = "/usr/share/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/config.ini";
+            $filename = "$mod_path/includes/app_cache_poison/config.ini";
             
             /*
             if ( 0 < filesize( $filename ) ) {
@@ -209,7 +248,7 @@ if ($logfile != "" and $action == "delete") {
         <br><br>
         <?
         	if ($tempname != "") {
-            	$filename = "/usr/share/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/templates/".$tempname;
+            	$filename = "$mod_path/includes/app_cache_poison/templates/".$tempname;
             	
                 /*
                 if ( 0 < filesize( $filename ) ) {
@@ -246,7 +285,7 @@ if ($logfile != "" and $action == "delete") {
     		<select name="tempname" onchange='this.form.submit()'>
         	<option value="0">-</option>
         	<?
-        	$template_path = "/usr/share/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/templates/";
+        	$template_path = "$mod_path/includes/app_cache_poison/templates/";
         	$templates = glob($template_path.'*');
         	//print_r($templates);
 
@@ -271,7 +310,7 @@ if ($logfile != "" and $action == "delete") {
         	<select name="new_rename">
         	<option value="0">- add template -</option>
         	<?
-        	$template_path = "/usr/share/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/templates/";
+        	$template_path = "$mod_path/includes/app_cache_poison/templates/";
         	$templates = glob($template_path.'*');
         	//print_r($templates);
 
@@ -306,7 +345,7 @@ if ($logfile != "" and $action == "delete") {
         	<select name="new_rename">
         	<option value="0">-</option>
         	<?
-        	$template_path = "/usr/share/FruityWifi/www/modules/sslstrip/includes/app_cache_poison/templates/";
+        	$template_path = "$mod_path/includes/app_cache_poison/templates/";
         	$templates = glob($template_path.'*');
         	//print_r($templates);
 
@@ -331,6 +370,68 @@ if ($logfile != "" and $action == "delete") {
         </tr>
     </table>
     </div>
+    
+    <!-- START FILTERS -->
+    
+    <div id="result-6" >
+        <form id="formFilters" name="formFilters" method="POST" autocomplete="off" action="includes/save.php">
+        <input type="submit" value="save"> [ParseLog.py]
+        
+        <br><br>
+        <?
+        	if ($tempname != "") {
+            	$filename = "$mod_path/includes/filters/resources/$tempname";
+                
+                $data = open_file($filename);
+                
+			} else {
+				$data = "";
+			}
+			
+            
+            
+        ?>
+        <textarea id="inject" name="newdata" class="module-content" style="font-family: courier;"><?=htmlspecialchars($data)?></textarea>
+        <input type="hidden" name="type" value="filters">
+        <input type="hidden" name="action" value="save">
+        <input type="hidden" name="tempname" value="<?=$tempname?>">
+        </form>
+        
+    <br>
+        
+    <table border=0 cellspacing=0 cellpadding=0>
+    	<tr>
+    	<td style="padding-right:10px">
+    		Setup  
+    	</td>
+    	<td>
+        <form id="formFilters" name="formFilters" method="POST" autocomplete="off" action="includes/save.php">
+    		<select name="tempname" onchange='this.form.submit()'>
+        	<option value="0">-</option>
+        	<?
+        	$template_path = "$mod_path/includes/filters/resources/";
+        	$templates = glob($template_path.'*');
+        	//print_r($templates);
+
+        	for ($i = 0; $i < count($templates); $i++) {
+            	$filename = str_replace($template_path,"",$templates[$i]);
+            	if ($filename == $tempname) echo "<option selected>"; else echo "<option>"; 
+            	echo "$filename";
+            	echo "</option>";
+        	}
+        	?>
+        	</select>
+        	<input type="hidden" name="type" value="filters">
+        	<input type="hidden" name="action" value="select">
+    	</form>
+        </td>
+        
+    </table>
+    </div>
+    
+    <!-- END FILTERS -->
+    
+    
 </div>
 
 <div id="loading" class="ui-widget" style="width:100%;background-color:#000; padding-top:4px; padding-bottom:4px;color:#FFF">
@@ -429,7 +530,11 @@ $('#loading').hide();
 </script>
 
 <?
-if ($_GET["tab"] == 2) {
+if ($_GET["tab"] == 1) {
+	echo "<script>";
+	echo "$( '#result' ).tabs({ active: 1 });";
+	echo "</script>";
+} else if ($_GET["tab"] == 2) {
 	echo "<script>";
 	echo "$( '#result' ).tabs({ active: 2 });";
 	echo "</script>";
@@ -441,8 +546,21 @@ if ($_GET["tab"] == 2) {
 	echo "<script>";
 	echo "$( '#result' ).tabs({ active: 4 });";
 	echo "</script>";
+} else if ($_GET["tab"] == 5) {
+	echo "<script>";
+	echo "$( '#result' ).tabs({ active: 5 });";
+	echo "</script>";
 }
 ?>
+
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#body').show();
+    $('#msg').hide();
+});
+</script>
 
 </body>
 </html>
