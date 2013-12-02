@@ -72,15 +72,23 @@ if ($logfile != "" and $action == "delete") {
 
 <div class="rounded-top" align="left"> &nbsp; <b>sslstrip</b> </div>
 <div class="rounded-bottom">
+    
     &nbsp;&nbsp;&nbsp;version <?=$mod_version?><br>
-    &nbsp; sslstrip <font style="color:lime">installed</font><br>
+    <? 
+    if (file_exists("$bin_sslstrip")) { 
+        echo "&nbsp; sslstrip <font style='color:lime'>installed</font><br>";
+    } else {
+        //echo "&nbsp;&nbsp;&nbsp; ngrep <font style='color:red'>install</font><br>";
+        echo "&nbsp; sslstrip <a href='includes/module_action.php?install=install_sslstrip' style='color:red'>install</a><br>";
+    } 
+    ?>
 
     <?
     $issslstripup = exec("ps auxww | grep sslstrip | grep -v -e grep");
     if ($issslstripup != "") {
-        echo "&nbsp;&nbsp;sslstrip  <font color=\"lime\"><b>enabled</b></font>.&nbsp; | <a href=\"../../scripts/status_sslstrip.php?service=sslstrip&action=stop&page=module\"><b>stop</b></a><br />";
+        echo "&nbsp;&nbsp;sslstrip  <font color=\"lime\"><b>enabled</b></font>.&nbsp; | <a href=\"includes/module_action.php?service=sslstrip&action=stop&page=module\"><b>stop</b></a><br />";
     } else { 
-        echo "&nbsp;&nbsp;sslstrip  <font color=\"red\"><b>disabled</b></font>. | <a href=\"../../scripts/status_sslstrip.php?service=sslstrip&action=start&page=module\"><b>start</b></a><br />"; 
+        echo "&nbsp;&nbsp;sslstrip  <font color=\"red\"><b>disabled</b></font>. | <a href=\"includes/module_action.php?service=sslstrip&action=start&page=module\"><b>start</b></a><br />"; 
     }
     ?>
     
