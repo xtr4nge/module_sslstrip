@@ -88,18 +88,11 @@ if ($install == "install_sslstrip") {
     exit;
 }
 
-//header('Location: ../index.php?tab=0');
-header('Location: ../../action.php?page=sslstrip');
-
-/*
-if ($page == "list") {
-    header('Location: ../page_sslstrip.php');
-} else if ($page == "module") {
-    //header('Location: ../modules/dnsspoof/index.php');
-    header('Location: ../modules/action.php?page=sslstrip');
+if ($page == "status") {
+    header('Location: ../../../action.php');
 } else {
-    header('Location: ../page_status.php');
+    header('Location: ../../action.php?page=sslstrip');
 }
-*/
+//header('Location: ../../action.php?page=sslstrip');
 
 ?>
