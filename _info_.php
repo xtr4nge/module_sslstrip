@@ -7,6 +7,9 @@ $mod_logs_history="/usr/share/FruityWifi/www/modules/sslstrip/includes/logs/";
 $mod_sslstrip_inject=1;
 $mod_sslstrip_tamperer=0;
 $mod_sslstrip_filter="";
+$mod_panel="show";
+$mod_isup="ps auxww | grep sslstrip | grep -v -e grep";
+$mod_alias="SSLstrip";
 # EXEC
 $bin_danger = "/usr/share/FruityWifi/bin/danger";
 $bin_sslstrip = "/usr/share/FruityWifi/www/modules/sslstrip/includes/sslstrip";
