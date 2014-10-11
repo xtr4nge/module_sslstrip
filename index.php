@@ -1,19 +1,19 @@
 <? 
 /*
-	Copyright (C) 2013  xtr4nge [_AT_] gmail.com
+    Copyright (C) 2013-2014  xtr4nge [_AT_] gmail.com
 
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */ 
 ?>
 <!DOCTYPE HTML>
@@ -45,8 +45,8 @@ $(function() {
 <?
 
 include "_info_.php";
-
 include "../../config/config.php";
+include "../../login_check.php";
 include "../../functions.php";
 
 // Checking POST & GET variables...
@@ -70,25 +70,25 @@ if ($logfile != "" and $action == "delete") {
 
 ?>
 
-<div class="rounded-top" align="left"> &nbsp; <b>sslstrip</b> </div>
+<div class="rounded-top" align="left"> &nbsp; <?=$mod_alias?> </div>
 <div class="rounded-bottom">
     
     &nbsp;&nbsp;&nbsp;version <?=$mod_version?><br>
     <? 
     if (file_exists("$bin_sslstrip")) { 
-        echo "&nbsp; sslstrip <font style='color:lime'>installed</font><br>";
+        echo "&nbsp;&nbsp;$mod_alias <font style='color:lime'>installed</font><br>";
     } else {
         //echo "&nbsp;&nbsp;&nbsp; ngrep <font style='color:red'>install</font><br>";
-        echo "&nbsp; sslstrip <a href='includes/module_action.php?install=install_sslstrip' style='color:red'>install</a><br>";
+        echo "&nbsp;&nbsp;$mod_alias <a href='includes/module_action.php?install=install_sslstrip' style='color:red'>install</a><br>";
     } 
     ?>
 
     <?
     $issslstripup = exec("ps auxww | grep sslstrip | grep -v -e grep");
     if ($issslstripup != "") {
-        echo "&nbsp;&nbsp;sslstrip  <font color=\"lime\"><b>enabled</b></font>.&nbsp; | <a href=\"includes/module_action.php?service=sslstrip&action=stop&page=module\"><b>stop</b></a><br />";
+        echo "&nbsp;&nbsp;$mod_alias&nbsp;&nbsp;sslstrip  <font color=\"lime\"><b>enabled</b></font>.&nbsp; | <a href=\"includes/module_action.php?service=sslstrip&action=stop&page=module\"><b>stop</b></a><br />";
     } else { 
-        echo "&nbsp;&nbsp;sslstrip  <font color=\"red\"><b>disabled</b></font>. | <a href=\"includes/module_action.php?service=sslstrip&action=start&page=module\"><b>start</b></a><br />"; 
+        echo "&nbsp;&nbsp;$mod_alias  <font color=\"red\"><b>disabled</b></font>. | <a href=\"includes/module_action.php?service=sslstrip&action=start&page=module\"><b>start</b></a><br />"; 
     }
     ?>
     
@@ -127,6 +127,7 @@ Loading, please wait...
         <li><a href="#result-4">Tamperer</a></li>
         <li><a href="#result-5">Templates</a></li>
         <li><a href="#result-6">Filters</a></li>
+		<li><a href="#result-7">About</a></li>
     </ul>
     <div id="result-1">
         <form id="formLogs-Refresh" name="formLogs-Refresh" method="GET" autocomplete="off" action="includes/save.php">
@@ -285,7 +286,7 @@ Loading, please wait...
         
     <table border=0 cellspacing=0 cellpadding=0>
     	<tr>
-    	<td>
+    	<td class="general">
     		Template
     	</td>
     	<td>
@@ -310,7 +311,7 @@ Loading, please wait...
     	</form>
         </td>
         <tr>
-        <td>
+        <td class="general">
         	Add/Rename
         </td>
         <td>
@@ -409,7 +410,7 @@ Loading, please wait...
         
     <table border=0 cellspacing=0 cellpadding=0>
     	<tr>
-    	<td style="padding-right:10px">
+    	<td class="general" style="padding-right:10px">
     		Setup  
     	</td>
     	<td>
@@ -438,6 +439,14 @@ Loading, please wait...
     </div>
     
     <!-- END FILTERS -->
+	
+	<!-- ABOUT -->
+
+	<div id="result-7" class="history">
+		<? include "includes/about.php"; ?>
+	</div>
+	
+	<!-- END ABOUT -->
     
     
 </div>

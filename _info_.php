@@ -1,6 +1,6 @@
 <?
 $mod_name="sslstrip";
-$mod_version="1.5";
+$mod_version="1.6";
 $mod_path="/usr/share/FruityWifi/www/modules/sslstrip/";
 $mod_logs="/usr/share/FruityWifi/logs/sslstrip.log"; 
 $mod_logs_history="/usr/share/FruityWifi/www/modules/sslstrip/includes/logs/";
