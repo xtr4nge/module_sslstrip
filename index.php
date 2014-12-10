@@ -43,15 +43,14 @@ $(function() {
 <br>
 
 <?
-
-include "_info_.php";
 include "../../config/config.php";
+include "_info_.php";
 include "../../login_check.php";
 include "../../functions.php";
 
 // Checking POST & GET variables...
 if ($regex == 1) {
-	regex_standard($_POST["newdata"], "msg.php", $regex_extra);
+    regex_standard($_POST["newdata"], "msg.php", $regex_extra);
     regex_standard($_GET["logfile"], "msg.php", $regex_extra);
     regex_standard($_GET["action"], "msg.php", $regex_extra);
     regex_standard($_GET["tempname"], "msg.php", $regex_extra);
@@ -65,7 +64,8 @@ $tempname = $_GET["tempname"];
 // DELETE LOG
 if ($logfile != "" and $action == "delete") {
     $exec = "$bin_rm ".$mod_logs_history.$logfile.".log";
-    exec("$bin_danger \"$exec\"", $dump);
+    //exec("$bin_danger \"$exec\"", $dump); //DEPRECATED
+    exec_fruitywifi($exec);
 }
 
 ?>
@@ -86,7 +86,7 @@ if ($logfile != "" and $action == "delete") {
     <?
     $issslstripup = exec("ps auxww | grep sslstrip | grep -v -e grep");
     if ($issslstripup != "") {
-        echo "&nbsp;&nbsp;$mod_alias&nbsp;&nbsp;sslstrip  <font color=\"lime\"><b>enabled</b></font>.&nbsp; | <a href=\"includes/module_action.php?service=sslstrip&action=stop&page=module\"><b>stop</b></a><br />";
+        echo "&nbsp;&nbsp;$mod_alias <font color=\"lime\"><b>enabled</b></font>.&nbsp; | <a href=\"includes/module_action.php?service=sslstrip&action=stop&page=module\"><b>stop</b></a><br />";
     } else { 
         echo "&nbsp;&nbsp;$mod_alias  <font color=\"red\"><b>disabled</b></font>. | <a href=\"includes/module_action.php?service=sslstrip&action=start&page=module\"><b>start</b></a><br />"; 
     }
@@ -129,6 +129,7 @@ Loading, please wait...
         <li><a href="#result-6">Filters</a></li>
 		<li><a href="#result-7">About</a></li>
     </ul>
+    <!-- OUTPUT -->
     <div id="result-1">
         <form id="formLogs-Refresh" name="formLogs-Refresh" method="GET" autocomplete="off" action="includes/save.php">
         <input type="submit" value="refresh">
@@ -156,13 +157,15 @@ Loading, please wait...
             
             if ($mod_sslstrip_filter == "LogEx.py") {
                 $exec = "$bin_python $mod_path/includes/filters/LogEx.py $filename";
-                exec("$bin_danger \"$exec\"", $output);
-                        
+                //exec("$bin_danger \"$exec\"", $output);
+		$output = exec_fruitywifi($exec); //DEPRECATED
+                
                 //$data = implode("\n",$output);
                 $data = $output;
             } else if ($mod_sslstrip_filter == "ParseLog.py") {
                 $exec = "$bin_python $mod_path/includes/filters/ParseLog.py $filename $mod_path/includes/filters";
-                exec("$bin_danger \"$exec\"", $output);
+                //exec("$bin_danger \"$exec\"", $output); //DEPRECATED
+		$output = exec_fruitywifi($exec);
                         
                 //$data = implode("\n",$output);
                 $data = $output;
@@ -188,7 +191,10 @@ Loading, please wait...
         <input type="hidden" name="type" value="logs">
         </form>
     </div>
-    <div id="result-2">
+    
+    <!-- HISTORY -->
+    
+    <div id="result-2" class="history">
         <input type="submit" value="refresh">
         <br><br>
         
@@ -211,7 +217,7 @@ Loading, please wait...
         <input type="submit" value="save">
         <br><br>
         <?
-            $filename = "/usr/share/FruityWifi/www/modules/sslstrip/includes/inject.txt";
+            $filename = "$mod_path/includes/inject.txt";
             
             /*
             if ( 0 < filesize( $filename ) ) {
