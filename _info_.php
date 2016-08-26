@@ -1,6 +1,6 @@
-<?
+<?php
 $mod_name="sslstrip";
-$mod_version="1.7";
+$mod_version="1.8";
 $mod_path="/usr/share/fruitywifi/www/modules/$mod_name";
 $mod_logs="$log_path/$mod_name.log"; 
 $mod_logs_history="$mod_path/includes/logs/";
@@ -10,8 +10,8 @@ $mod_sslstrip_filter="";
 $mod_panel="show";
 $mod_isup="ps auxww | grep sslstrip | grep -v -e grep";
 $mod_alias="SSLstrip";
+
 # EXEC
-$bin_danger = "/usr/share/fruitywifi/bin/danger";
 $bin_sslstrip = "$mod_path/includes/sslstrip";
 $bin_python = "/usr/bin/python";
 $bin_rm = "/bin/rm";

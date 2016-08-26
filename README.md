@@ -1,10 +1,13 @@
 module_sslstrip
 ===============
 
-FruityWifi sslstrip module.
-Copyright (C) 2013  xtr4nge [_AT_] gmail.com
+FruityWiFi sslstrip module.
+Copyright (C) 2013-2016  xtr4nge [_AT_] gmail.com
 
-Note: Based on the wifipineapple infusion created by whistlemaster.
+
+v1.8
+---------------------------------
+- PHP7 compatibility issues has been fixed
 
 
 v1.4
